@@ -1,16 +1,38 @@
-# Tauri + Vue 3 + TypeScript
+# Kafka Client Desktop Application
+This project is in very early stage of development. The idea is to build a Kafka GUI client that is keyboard friendly, supporting the following features allowing to connect to any kafka cluster. 
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+- Admin
+    - Topic
+        - Create/Delete
+        - Alter Configs
+        - Increase Partitions
+    - Consumer Groups
+        - Create (offsets by start, end and timestamp).
+        - Delete.
+        - Reset Offsets (timestamp, latest, earliest, shift by offset)
+- Consumers
+    - Consume messages between timestamps, from earliest, and from latest.
+    - Deserialisation support JSON/String (future: avro, protobuf).
+    - Filtering messages by Key, JSON payload properties.
+    - Export to file csv, json.
+- Producers
+    - Support addition of headers
+    - Serialisation support JSON/String (future: avro, protobuf)
+    - Produce on specific partition
+    - History of produced messages, resend, edit and resend.
+    - Produce from a file csv, json.
 
-## Recommended IDE Setup
+## Build & Run
+This is built using Tauri Framework. Follow the [Tauri's Develop Guide](https://v2.tauri.app/develop/#developing-your-desktop-application) to build and run this project. Additionally, this project requires [librdkafka c/c++ library](https://github.com/confluentinc/librdkafka) installed on your system.
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
+## Contibute
+If you'd like to contribute to this project please create an issue.
 
-## Type Support For `.vue` Imports in TS
+## Todo
+- [] Add User input Bootstrap servers (Cluster configs).
+- [] Add Multiple Configs Selection while creating topics.
+- [] Use pinia store to keep consuming messages in the store.
+- [] Support Multiple Consumers 
+- [] Add Prouducers feature
+- [] Support Multiple Serialization
 
-Since TypeScript cannot handle type information for `.vue` imports, they are shimmed to be a generic Vue component type by default. In most cases this is fine if you don't really care about component prop types outside of templates. However, if you wish to get actual prop types in `.vue` imports (for example to get props validation when using manual `h(...)` calls), you can enable Volar's Take Over mode by following these steps:
-
-1. Run `Extensions: Show Built-in Extensions` from VS Code's command palette, look for `TypeScript and JavaScript Language Features`, then right click and select `Disable (Workspace)`. By default, Take Over mode will enable itself if the default TypeScript extension is disabled.
-2. Reload the VS Code window by running `Developer: Reload Window` from the command palette.
-
-You can learn more about Take Over mode [here](https://github.com/johnsoncodehk/volar/discussions/471).
