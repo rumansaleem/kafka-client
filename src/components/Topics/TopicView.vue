@@ -100,7 +100,8 @@ function submitAddTopicConfig() {
         </DialogFooter>
       </DialogContent>
     </Dialog>
-    <div v-if="!configLoading && nonDefaultConfigs.length > 0" class="-m-1 px-1 pt-1 mb-4 flex flex-wrap items-center">
+    <p v-if="configLoading" class="mb-4"><strong class="font-bold">configs:</strong> Loading... </p>
+    <div v-else-if="nonDefaultConfigs.length > 0" class="-m-1 px-1 pt-1 mb-4 flex flex-wrap items-center">
       <strong class="font-bold">configs:</strong> 
       <Badge variant="outline" v-for="config in nonDefaultConfigs" :key="config.name" class="m-1 font-mono inline-flex items-baseline space-x-2">
         <span v-text="`${config.name}=${config.value}`"></span>
@@ -110,10 +111,12 @@ function submitAddTopicConfig() {
         <PlusIcon class="block w-3 h-3" />
       </Button>
     </div>
-    <p v-else-if="configLoading" class="mb-4"><strong class="font-bold">configs:</strong> Loading... </p>
-    <p v-else class="mb-4"><strong class="font-bold">configs:</strong>  
-      No additional configuration found for this topic. 
-      <Button variant="outline" size="xs" @click="() => showAddConfigsDialog = true"><PlusIcon class="block w-4 h-4" /></Button>
+    <p v-else class="mb-4 space-x-1">
+      <strong class="font-bold">configs:</strong>  
+      <span class="text-muted-foreground">No additional configuration found for this topic. </span>
+      <Button variant="default" size="xs" class="h-6 w-6 p-0 rounded-full" @click="() => showAddConfigsDialog = true">
+        <PlusIcon class="block w-3 h-3" />
+      </Button>
     </p>
     <h2 class="text-xl font-bold mb-2">Partitions</h2>
     <Table>
