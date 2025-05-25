@@ -3,6 +3,7 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 import { useTopics } from "./topics";
 import { useBrokers } from "./brokers";
+import { FreeBrush } from "@unovis/ts";
 
 const DEFAULT_TTL = 5 * 60 * 1000; // 5 mins
 
@@ -24,6 +25,7 @@ export const useClusterMetadata = defineStore("metadata", () => {
         lastLoadTime.value = Date.now();
         const { setTopicsMetadata } = useTopics();
         const { setBrokers } = useBrokers();
+        console.log("Fetched Metadata: ", data);
         setTopicsMetadata(data.topics);
         setBrokers(data.brokers);
         originatingBrokerId.value = data.originating_broker_id;

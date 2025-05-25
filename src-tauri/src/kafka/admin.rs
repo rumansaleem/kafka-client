@@ -1,5 +1,4 @@
-use std::{borrow::Borrow, collections::HashMap, ffi::{CStr, CString}, ptr::slice_from_raw_parts, time::Duration};
-use itertools::Itertools;
+use std::{borrow::Borrow, collections::HashMap, ffi::CStr, ptr::slice_from_raw_parts, time::Duration};
 use rdkafka::{
     admin::{AdminClient, AdminOptions, AlterConfig, ConfigEntry, ConfigResource, ConfigSource as KafkaConfigSource, NewTopic, OwnedResourceSpecifier, ResourceSpecifier, TopicReplication, TopicResult}, bindings::{rd_kafka_AdminOptions_new, rd_kafka_ListOffsets, rd_kafka_ListOffsetsResultInfo_topic_partition, rd_kafka_ListOffsets_result_infos, rd_kafka_event_ListOffsets_result, rd_kafka_event_destroy, rd_kafka_event_error, rd_kafka_event_error_string, rd_kafka_queue_destroy, rd_kafka_queue_new, rd_kafka_queue_poll}, client::{Client, DefaultClientContext}, config::FromClientConfig, consumer::{BaseConsumer, CommitMode, Consumer}, error::IsError, statistics::Topic, topic_partition_list::TopicPartitionListElem, types::RDKafkaErrorCode, util::Timeout, ClientConfig, ClientContext, Offset, TopicPartitionList
 };

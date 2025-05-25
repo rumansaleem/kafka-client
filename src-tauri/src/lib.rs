@@ -3,24 +3,19 @@
 mod core;
 mod kafka;
 
-use crate::core::{
-    commands,
-    config::ApplicationState,
-};
+use crate::core::{commands, config::ApplicationState};
 
 #[cfg_attr(mobile, tauri::mobile_enrty_point)]
 pub fn run() {
+    let ctx = tauri::generate_context!();
+    let mut builder = tauri::Builder::default().plugin(tauri_plugin_os::init());
 
-    let mut ctx = tauri::generate_context!();
-    let mut builder = tauri::Builder::default()
-        .plugin(tauri_plugin_os::init());
-        
     #[cfg(debug_assertions)]
     {
         builder = builder.plugin(tauri_plugin_devtools::init());
     }
-        
-    builder.plugin(tauri_plugin_theme::init(ctx.config_mut()))
+
+    builder
         .plugin(tauri_plugin_shell::init())
         .manage(ApplicationState::load())
         .invoke_handler(tauri::generate_handler![
@@ -40,6 +35,4 @@ pub fn run() {
         ])
         .run(ctx)
         .expect("error while running tauri application");
-
-    
 }

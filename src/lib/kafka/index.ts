@@ -33,7 +33,13 @@ export type ConfigEntry = {
   isDefault: boolean;
   isReadOnly: boolean;
   isSensitive: boolean;
-  source: "Unknown" | "Default" | "DynamicTopic" | "DynamicBroker" | "StaticBroker" | "DynamicDefaultBroker";
+  source:
+    | "Unknown"
+    | "Default"
+    | "DynamicTopic"
+    | "DynamicBroker"
+    | "StaticBroker"
+    | "DynamicDefaultBroker";
 };
 
 // Topics & Broker Metadata
@@ -65,7 +71,12 @@ export function getClusterMetadata(): Promise<ClusterMetadata> {
 
 export type TopicGroupOffsets = {
   topic: string;
-  partitions: { partition: number; startOffset: number; endOffset: number; currentOffset: number }[];
+  partitions: {
+    partition: number;
+    startOffset: number;
+    endOffset: number;
+    currentOffset: number;
+  }[];
 };
 export function getGroupOffsets(groupName: string): Promise<TopicGroupOffsets[]> {
   return invoke<TopicGroupOffsets[]>("get_group_offsets", { groupName });
@@ -76,7 +87,11 @@ export type GroupOffset =
   | { type: "End" }
   | { type: "Tail"; content: number }
   | { type: "Offset"; content: number };
-export function createConsumerGroup(groupId: string, topics: string[], initialOffset: GroupOffset): Promise<void> {
+export function createConsumerGroup(
+  groupId: string,
+  topics: string[],
+  initialOffset: GroupOffset
+): Promise<void> {
   return invoke<void>("create_group_offsets", { groupId, topics, initialOffset });
 }
 
@@ -121,9 +136,16 @@ export type MessageEnvelope = {
 };
 
 export type JsonMessageEnvelope = MessageEnvelope & { payloadJson: Record<string, unknown> | null };
-export type FetchOffset = { type: "Beginning" } | { type: "End" } | { type: "Timestamp"; content: number };
+export type FetchOffset =
+  | { type: "Beginning" }
+  | { type: "End" }
+  | { type: "Timestamp"; content: number };
 export function consumeTopicBetweenOffsets(topic: string, start: FetchOffset, end?: FetchOffset) {
-  return invoke<[string, Record<string, [number, number][]>]>("consume_topic_by_timestamp", { topic, start, end });
+  return invoke<[string, Record<string, [number, number][]>]>("consume_topic_by_timestamp", {
+    topic,
+    start,
+    end
+  });
 }
 
 export function stopConsumer(consumerId: string) {

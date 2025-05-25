@@ -10,7 +10,7 @@ import { Toaster } from "@/components/ui/toast";
       <RouterView />
     </div>
     <div class="grid gap-2">
-      <Toaster/>
+      <Toaster />
     </div>
   </div>
 </template>

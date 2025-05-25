@@ -20,6 +20,17 @@ impl Config {
     pub fn load() -> Self {
         let clusters = HashMap::from([
             (
+                "docker".to_owned(),
+                ClusterConfig {
+                    name: "docker".to_owned(),
+                    bootstrap_servers: vec![
+                        "localhost:29092".to_owned(),
+                        "localhost:39092".to_owned(),
+                        "localhost:49092".to_owned(),
+                    ],
+                },
+            ),
+            (
                 "dev".to_owned(),
                 ClusterConfig {
                     name: "dev".to_owned(),
@@ -44,7 +55,7 @@ impl Config {
 
         Self {
             clusters,
-            default_cluster: "local".to_owned(),
+            default_cluster: "docker".to_owned(),
         }
     }
 
@@ -76,14 +87,14 @@ impl Config {
 
 pub struct ApplicationState {
     pub config: Mutex<Config>,
-    pub active_consumers: Mutex<HashMap<String, tokio::sync::mpsc::Sender<()>>>
+    pub active_consumers: Mutex<HashMap<String, tokio::sync::mpsc::Sender<()>>>,
 }
 
 impl ApplicationState {
     pub fn load() -> Self {
         ApplicationState {
             config: Mutex::new(Config::load()),
-            active_consumers: Mutex::new(HashMap::new())
+            active_consumers: Mutex::new(HashMap::new()),
         }
     }
 }

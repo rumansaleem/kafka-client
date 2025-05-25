@@ -27,8 +27,8 @@
         "resizable": true,
         "decorations": false,
         "title": "Kafka Client",
-        "width": 1024,
-        "height": 768
+        "width": 1600,
+        "height": 900
       }
     ],
     "security": {
