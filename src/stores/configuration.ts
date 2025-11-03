@@ -1,6 +1,6 @@
-import { ClusterConfig, getConfig } from "@/lib/config";
+import { ClusterConfig, getConfigClusters } from "@/lib/config";
 import { defineStore } from "pinia";
-import { computed, ref } from "vue";
+import { computed, reactive, toRef } from "vue";
 
 type AppConfig = {
   clusters: ClusterConfig[];
@@ -11,23 +11,26 @@ const DEFAULT_APP_CONFIG: AppConfig = {
   currentClusterName: ""
 };
 export const useAppConfig = defineStore("appConfig", () => {
-  const config = ref<AppConfig>(DEFAULT_APP_CONFIG);
-  const cluster = computed(() =>
-    config.value.clusters.find(c => c.name === config.value.currentClusterName)
-  );
-
-  function setCurrentCluster(cluster: ClusterConfig) {
-    const existingCluster = config.value.clusters.find(c => c.name === cluster.name);
-    if (!existingCluster) {
-      config.value.clusters.push(cluster);
-    }
-    config.value.currentClusterName = cluster.name;
-  }
+  const config = reactive<AppConfig>(DEFAULT_APP_CONFIG);
+  const cluster = computed(() => config.clusters.find(c => c.name === config.currentClusterName));
 
   async function loadConfig() {
-    const cluster = await getConfig();
-    setCurrentCluster(cluster);
+    const clusters = await getConfigClusters();
+    config.clusters = clusters;
+    config.currentClusterName = clusters.length > 0 ? clusters[0].name : "";
   }
 
-  return { cluster, loadConfig, setCurrentCluster };
+  async function addNewCluster(cluster: ClusterConfig, isCurrent = false) {
+    config.clusters.push(cluster);
+    if (isCurrent) {
+      config.currentClusterName = cluster.name;
+    }
+  }
+
+  return {
+    clusters: toRef(config, "clusters"),
+    cluster,
+    loadConfig,
+    addNewCluster
+  };
 });

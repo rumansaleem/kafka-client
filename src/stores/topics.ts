@@ -13,8 +13,6 @@ import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 import { useClusterMetadata } from "./metadata";
 
-const DEFAULT_CONFIG_TTL = 5 * 60 * 1000; // 5 mins
-
 export const useTopics = defineStore("topics", () => {
   let allTopics = ref<TopicInfo[]>([]);
   const isEmpty = computed(() => allTopics.value.length === 0);

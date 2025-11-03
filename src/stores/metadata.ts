@@ -3,7 +3,6 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 import { useTopics } from "./topics";
 import { useBrokers } from "./brokers";
-import { FreeBrush } from "@unovis/ts";
 
 const DEFAULT_TTL = 5 * 60 * 1000; // 5 mins
 
@@ -14,7 +13,6 @@ export const useClusterMetadata = defineStore("metadata", () => {
   const originatingBrokerId = ref(0);
 
   function fetchMetadata() {
-    console.log("Fetching Metadata");
     isLoading.value = true;
     return getClusterMetadata()
       .catch(err => {
@@ -39,7 +37,6 @@ export const useClusterMetadata = defineStore("metadata", () => {
 
   function loadMetadata(ttl = DEFAULT_TTL) {
     const metadataAge = Date.now() - lastLoadTime.value;
-    console.log(`Load Metadata, age: ${metadataAge}, ttl: ${ttl}, Fetch: ${metadataAge > ttl}`);
     if (metadataAge > ttl) {
       return fetchMetadata();
     }

@@ -6,9 +6,11 @@
     "main"
   ],
   "permissions": [
+    "core:app:allow-set-app-theme",
     "core:path:default",
     "core:event:default",
     "core:window:default",
+    "core:window:allow-start-dragging",
     "core:app:default",
     "core:image:default",
     "core:resources:default",
@@ -20,6 +22,10 @@
     "os:allow-arch",
     "core:app:allow-name",
     "core:webview:default",
-    "core:webview:allow-internal-toggle-devtools"
+    "core:webview:allow-internal-toggle-devtools",
+    "store:default",
+    "store:allow-load",
+    "store:allow-save",
+    "store:allow-set"
   ]
 }

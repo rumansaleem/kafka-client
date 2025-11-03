@@ -17,6 +17,7 @@ pub fn run() {
 
     builder
         .plugin(tauri_plugin_shell::init())
+        .plugin(tauri_plugin_store::Builder::new().build())
         .manage(ApplicationState::load())
         .invoke_handler(tauri::generate_handler![
             commands::get_current_cluster,

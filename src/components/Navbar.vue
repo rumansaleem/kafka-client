@@ -1,23 +1,34 @@
 <script lang="ts" setup>
-import { WindowTitlebar } from '@tauri-controls/vue'
-import MenuModeToggle from './MenuModeToggle.vue'
-import AboutDialog from './AboutDialog.vue'
-import {Menubar, MenubarMenu, MenubarTrigger, MenubarContent, MenubarItem, MenubarSeparator, MenubarShortcut, MenubarSub, MenubarSubTrigger, MenubarSubContent, MenubarCheckboxItem, MenubarLabel, MenubarRadioGroup, MenubarRadioItem} from './ui/menubar'
-import { Dialog, DialogTrigger } from './ui/dialog'
-import { Icons } from './Icons'
-import { onMounted } from 'vue'
-import { getCurrentWebviewWindow } from '@tauri-apps/api/webviewWindow'
+import { WindowTitlebar } from "@tauri-controls/vue";
+import MenuModeToggle from "./MenuModeToggle.vue";
+import AboutDialog from "./AboutDialog.vue";
+import {
+  Menubar,
+  MenubarMenu,
+  MenubarTrigger,
+  MenubarContent,
+  MenubarItem,
+  MenubarSeparator,
+  MenubarShortcut,
+  MenubarLabel,
+  MenubarRadioGroup,
+  MenubarRadioItem
+} from "./ui/menubar";
+import { Dialog, DialogTrigger } from "./ui/dialog";
+import { Icons } from "./Icons";
+import { onMounted } from "vue";
+import { getCurrentWebviewWindow } from "@tauri-apps/api/webviewWindow";
 
 function closeWindow() {
-  const appWindow = getCurrentWebviewWindow()
-  appWindow.close()
+  const appWindow = getCurrentWebviewWindow();
+  appWindow.close();
 }
-onMounted(() => console.log("<Navbar />"))
+onMounted(() => console.log("<Navbar />"));
 </script>
 
 <template>
-  <WindowTitlebar controls-order="platform" :window-controls-props="{ platform: 'gnome'}">
-    <Menubar class="rounded-none border-b border-none pl-2 lg:pl-3">
+  <WindowTitlebar controls-order="platform" :window-controls-props="{ platform: 'gnome' }">
+    <Menubar class="rounded-none border-b border-none pl-2 lg:pl-3 dark:bg-black">
       <MenubarMenu>
         <div class="inline-flex h-fit w-fit items-center text-cyan-600">
           <Icons.kafka class="h-5" />
@@ -30,13 +41,13 @@ onMounted(() => console.log("<Navbar />"))
         <Dialog :modal="false">
           <MenubarContent>
             <MenubarItem>
-              <RouterLink to="/">Topics View</RouterLink>
+              <RouterLink to="/clusters">Clusters View</RouterLink>
+            </MenubarItem>
+            <MenubarItem>
+              <RouterLink to="/topics">Topics View</RouterLink>
             </MenubarItem>
             <MenubarItem>
               <RouterLink to="/consumer-groups">Groups View</RouterLink>
-            </MenubarItem>
-            <MenubarItem>
-              <RouterLink to="/consumer">Consumer</RouterLink>
             </MenubarItem>
             <DialogTrigger as-child>
               <MenubarItem>
@@ -44,9 +55,7 @@ onMounted(() => console.log("<Navbar />"))
               </MenubarItem>
             </DialogTrigger>
             <MenubarSeparator />
-            <MenubarItem>
-              Preferences... <MenubarShortcut>⌘,</MenubarShortcut>
-            </MenubarItem>
+            <MenubarItem> Preferences... <MenubarShortcut>⌘,</MenubarShortcut> </MenubarItem>
             <MenubarShortcut />
             <MenubarItem @click="closeWindow">
               Quit <MenubarShortcut>⌘Q</MenubarShortcut>

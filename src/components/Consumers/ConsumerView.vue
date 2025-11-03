@@ -20,6 +20,7 @@ const props = defineProps<{
 const messages = ref<JsonMessageEnvelope[]>([]);
 
 const modalMessage = ref<JsonMessageEnvelope | undefined>();
+const isStartConsumerModalOpen = ref(false);
 const isOpen = ref(false);
 const openModal = (message: JsonMessageEnvelope) => {
   modalMessage.value = message;
@@ -59,7 +60,7 @@ function fetchMessage() {
 
   isConsuming.value = true;
   consumerId.value = undefined;
-  const start: FetchOffset = offsetType.value === 'Timestamp' 
+  const start: FetchOffset = offsetType.value === 'Timestamp'
     ? {type: offsetType.value, content: offsetTimestamp.value.toDate(getLocalTimeZone()).getTime()*1000 }
     : {type: offsetType.value};
 
@@ -124,14 +125,15 @@ watch(() => props.topic, (newTopic, oldTopic) => {
         <span v-text="topic"></span>
       </h2>
     </div>
-    <Dialog :open="true">
+    <Dialog v-model:open="isStartConsumerModalOpen">
       <DialogTrigger as-child>
         <Button :disabled="isConsuming">Consume</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Start New Consumer</DialogTitle>
-          <DialogDescription>Choose confiugration to start consuming from the topic `{{ props.topic }}`
+          <DialogDescription
+            >Choose confiugration to start consuming from the topic `{{ props.topic }}`
           </DialogDescription>
         </DialogHeader>
         <form id="consumer-creation-form" @submit.prevent="() => fetchMessage()">
@@ -160,17 +162,30 @@ watch(() => props.topic, (newTopic, oldTopic) => {
               </Select>
               <Popover v-if="offsetType === 'Timestamp'">
                 <PopoverTrigger as-child>
-                  <Button variant="outline" :class="cn(
-                      'w-[280px] justify-start text-left font-normal',
-                      !offsetTimestamp && 'text-muted-foreground',
-                    )">
+                  <Button
+                    variant="outline"
+                    :class="
+                      cn(
+                        'w-[280px] justify-start text-left font-normal',
+                        !offsetTimestamp && 'text-muted-foreground'
+                      )
+                    "
+                  >
                     <CalendarIcon class="mr-2 h-4 w-4" />
-                    {{ offsetTimestamp ? df.format(offsetTimestamp.toDate(getLocalTimeZone())) : "Pick a date" }}
+                    {{
+                      offsetTimestamp
+                        ? df.format(offsetTimestamp.toDate(getLocalTimeZone()))
+                        : "Pick a date"
+                    }}
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent class="w-auto p-0">
-                  <Calendar v-model="offsetTimestamp" initial-focus  />
-                  <Input type="time" :value="tf.format(offsetTimestamp.toDate(getLocalTimeZone()))" @update="updateTime"/>
+                  <Calendar v-model="offsetTimestamp" initial-focus />
+                  <Input
+                    type="time"
+                    :value="tf.format(offsetTimestamp.toDate(getLocalTimeZone()))"
+                    @update="updateTime"
+                  />
                 </PopoverContent>
               </Popover>
             </div>
@@ -189,15 +204,26 @@ watch(() => props.topic, (newTopic, oldTopic) => {
 
   <main class="p-4">
     <ul class="space-y-4">
-      <li v-for="currentMessage in messages" :key="currentMessage.payload" class="bg-neutral-100 shadow rounded-md p-2">
-        <ul v-if="Object.keys(currentMessage.headers).length > 0" class="space-x-2 flex items-center flex-wrap mb-2">
+      <li
+        v-for="currentMessage in messages"
+        :key="currentMessage.payload"
+        class="bg-neutral-100 shadow rounded-md p-2"
+      >
+        <ul
+          v-if="Object.keys(currentMessage.headers).length > 0"
+          class="space-x-2 flex items-center flex-wrap mb-2"
+        >
           <li v-for="key in Object.keys(currentMessage.headers)">
             <span v-text="key" class="px-2 py-1 text-xs bg-neutral-300 rounded-full"></span>
           </li>
         </ul>
-        <pre @click="() => openModal(currentMessage)"
-          class="truncate mb-2"><code v-text="currentMessage.payload"></code></pre>
-        <footer class="-mx-2 -mb-2 px-2 py-1 border-t border-neutral-300 text-xs flex justify-between">
+        <pre
+          @click="() => openModal(currentMessage)"
+          class="truncate mb-2"
+        ><code v-text="currentMessage.payload"></code></pre>
+        <footer
+          class="-mx-2 -mb-2 px-2 py-1 border-t border-neutral-300 text-xs flex justify-between"
+        >
           <div class="space-x-3 flex items-baseline">
             <p>Key: "{{ currentMessage.key }}"</p>
             <p>Partition: {{ currentMessage.partition }}</p>
@@ -210,17 +236,29 @@ watch(() => props.topic, (newTopic, oldTopic) => {
         </footer>
       </li>
     </ul>
-    <Dialog v-model:open="isOpen" @update:open="(value) => {if (!value) {cleanUpModal()}}">
+    <Dialog
+      v-model:open="isOpen"
+      @update:open="
+        value => {
+          if (!value) {
+            cleanUpModal();
+          }
+        }
+      "
+    >
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
             Message
           </DialogTitle>
-          <DialogDescription>Received on {{modalMessage?.partition}}@{{ modalMessage?.offset }}</DialogDescription>
+          <DialogDescription
+            >Received on {{ modalMessage?.partition }}@{{ modalMessage?.offset }}</DialogDescription
+          >
         </DialogHeader>
         <div class="mt-2 p-3 rounded-lg bg-neutral-100 w-full overflow-auto">
           <pre
-            class="text-sm text-gray-500"><code v-text="JSON.stringify(modalMessage?.payloadJson, null, 2)"></code></pre>
+            class="text-sm text-gray-500"
+          ><code v-text="JSON.stringify(modalMessage?.payloadJson, null, 2)"></code></pre>
         </div>
       </DialogContent>
     </Dialog>

@@ -25,6 +25,7 @@ tauri-plugin-os = "2.0.0"
 itertools = "0.13.0"
 tokio = "1.38.1"
 tauri-plugin-devtools = "2.0.0"
+tauri-plugin-store = "2"
 
 [lib]
 name = "app_lib"
